@@ -1,9 +1,9 @@
 package comy.model
 
-import xt.Logger
-
 import java.util.{ArrayList, Date, Calendar}
 import java.text.SimpleDateFormat
+
+import org.slf4j.{Logger, LoggerFactory}
 
 import com.mongodb._
 
@@ -42,9 +42,11 @@ object SaveUrlResult extends Enumeration {
  * See: http://www.mongodb.org/display/DOCS/Java+Language+Center
  * Only one instance of this class should be used for the whole application.
  */
-object DB extends Logger {
+object DB {
   import DBUrlColl._
   import SaveUrlResult._
+
+  val logger = LoggerFactory.getLogger(getClass)
 
   private val coll  = {
     val addrs = new ArrayList[ServerAddress]

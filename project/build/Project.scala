@@ -1,8 +1,6 @@
 import sbt._
 
-class Project(info: ProjectInfo) extends DefaultProject(info) {
-  // Compile options
-
+class Project(info: ProjectInfo) extends DefaultWebProject(info) {
   override def compileOptions = super.compileOptions ++
     Seq("-deprecation",
         "-Xmigration",
@@ -15,8 +13,34 @@ class Project(info: ProjectInfo) extends DefaultProject(info) {
 
   // Repos ---------------------------------------------------------------------
 
+  // Servlet container
+  val jetty7      = "org.eclipse.jetty" % "jetty-webapp" % "7.0.2.RC0" % "provided"
+  val jspApi      = "javax.servlet"     % "jsp-api"      % "2.0"       % "provided"
+  val jspCompiler = "org.mortbay.jetty" % "jsp"          % "5.5.12"    % "provided"
+
+  val javaNetRepo    = "java.net"   at "http://download.java.net/maven/2/"          // For both JSF and EL
+  val glassfishRepo  = "Glassfish"  at "http://download.java.net/maven/glassfish/"  // For JSTL
+  val primeFacesRepo = "PrimeFaces" at "http://repository.prime.com.tr"
+
   override def libraryDependencies = Set(
-    "cntt"           %% "xitrum"            % "0.1-SNAPSHOT",
+    // http://www.coreservlets.com/JSF-Tutorial/jsf2/index.html says that we need
+    // these 4 JARs
+    "com.sun.faces"          % "jsf-api"   % "2.0.3",
+    "com.sun.faces"          % "jsf-impl"  % "2.0.3",  // Does not work if set to "provided"
+    "javax.servlet.jsp.jstl" % "jstl-api"  % "1.2" % "provided",
+    "org.glassfish.web"      % "jstl-impl" % "1.2" % "provided",
+
+    // http://musingsofaprogrammingaddict.blogspot.com/2009/12/running-jsf-2-on-embedded-jetty.html
+    "javax.el"          % "el-api"  % "2.2" % "provided",
+    "org.glassfish.web" % "el-impl" % "2.2" % "provided",
+
+    // For REST API
+    "com.sun.jersey" % "jersey-core"   % "1.4" % "compile",
+    "com.sun.jersey" % "jersey-server" % "1.4" % "compile",
+
+    // For Admin UI
+    "org.primefaces" % "primefaces" % "2.2.RC2",
+
     "ch.qos.logback" %  "logback-classic"   % "0.9.26",
     "org.mongodb"    %  "mongo-java-driver" % "2.3"
   ) ++ super.libraryDependencies
@@ -24,6 +48,4 @@ class Project(info: ProjectInfo) extends DefaultProject(info) {
   // Paths ---------------------------------------------------------------------
 
   override def unmanagedClasspath = super.unmanagedClasspath +++ ("config")
-
-  override def mainClass = Some("comy.Boot")
 }

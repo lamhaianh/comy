@@ -1,18 +1,16 @@
 package comy.controller
 
-import xt.vc.annotation._
+import java.io.ByteArrayOutputStream
+import java.net.URI
 
-import org.jboss.netty.handler.codec.http._
-import HttpHeaders.Names._
-import HttpResponseStatus._
+import javax.imageio.ImageIO
+import javax.ws.rs.{GET, POST, Path, PathParam, QueryParam, Produces}
+import javax.ws.rs.core.Response
 
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.common.ByteMatrix
 import com.google.zxing.qrcode.QRCodeWriter
-
-import javax.imageio.ImageIO
-import java.io.ByteArrayOutputStream
 
 import comy.Config
 import comy.model.{DB, SaveUrlResult}
@@ -22,39 +20,31 @@ object Api {
   val QR_CODE_HEIGHT = 150
 }
 
-class Api extends Application {
+class Api {
   import Api._
 
-  beforeFilter("checkIpForShorten", Except("lengthen"))
-
-  @Path("/")
-  def index {
-    renderView
-  }
+  //beforeFilter("checkIpForShorten", Except("lengthen"))
 
   @POST
   @Path("/api/shorten")  // ?url=URL[&key=KEY]
-  def shorten {
-    val url = param("url")
-
-    val keyo = paramo("key")
+  def shorten(@PathParam("url") url: String, @QueryParam("key") key: String) = {
+    val keyo = if (key != null) Some(key) else None
     val (resultCode, resultString) = DB.saveUrl(url, keyo)
 
     val status = resultCode match {
-      case SaveUrlResult.VALID     => OK
-      case SaveUrlResult.INVALID   => BAD_REQUEST
-      case SaveUrlResult.DUPLICATE => CONFLICT
-      case SaveUrlResult.ERROR     => INTERNAL_SERVER_ERROR
+      case SaveUrlResult.VALID     => 200
+      case SaveUrlResult.INVALID   => 400
+      case SaveUrlResult.DUPLICATE => 409
+      case SaveUrlResult.ERROR     => 500
     }
-    response.setStatus(status)
-    renderText(resultString, None)
+
+    if (status != 200) Response.status(status).build else resultString
   }
 
   /** See: http://www.hascode.com/2010/05/playing-around-with-qr-codes/ */
   @Path("/api/qrcode")  // ?url=xxx
-  def qrcode {
-    val url = param("url")
-
+  @Produces(Array("image/png"))
+  def qrcode(@QueryParam("key") url: String) = {
     val writer = new QRCodeWriter
     val mtx    = writer.encode(url, BarcodeFormat.QR_CODE, QR_CODE_WIDTH, QR_CODE_HEIGHT)
     invertImage(mtx)
@@ -62,35 +52,34 @@ class Api extends Application {
 
     val baos = new ByteArrayOutputStream
     ImageIO.write(image, "png", baos)
-    response.setHeader(CONTENT_TYPE, "image/png")
-    renderBinary(baos.toByteArray)
+    baos.toByteArray
   }
 
-  @Path("/:key")
-  def lengthen {
-    val key = param("key")
+  @Path("/{key}")
+  def lengthen(@PathParam("key") key: String) {
     DB.getUrl(key) match {
       case Some(url) =>
         // Use 302 instead of 301 because:
         // * Some KDDI AU mobiles display annoying dialog for 301
         // * Not all browsers support HTTP/1.1
-        redirectTo(url)
+        Response.seeOther(new URI(url)).build
 
       case None =>
-        response.setStatus(NOT_FOUND)
-        renderText("Not Found")
+        Response.status(404).build
     }
   }
 
   //----------------------------------------------------------------------------
 
   protected def checkIpForShorten = {
-    if (Config.isApiAllowed(remoteIp)) {
+/*    if (Config.isApiAllowed(remoteIp)) {
       true
     } else {
       response.setStatus(FORBIDDEN)
       false
     }
+*/
+    true
   }
 
   private def invertImage(mtx: ByteMatrix) {

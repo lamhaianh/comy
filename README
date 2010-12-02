@@ -1,6 +1,8 @@
-Comy is a simple URL Shortener service that uses Scala, Netty, and MongoDB.
+Comy is a simple URL Shortener service that uses Scala and MongoDB.
 URLs will be shorten to a 7-character string using base 62. In theory, it can
 support up to 62^7 unique URLs (more than 3 trillions).
+
+= API
 
 == POST
 
@@ -30,3 +32,7 @@ Response:
 * 302: the client will be redirected to the original URL
 * 404: invalid key or the key has been expired
 * 500: server error, for example the DB may be down
+
+= INSTALL
+
+Add -Djava.awt.headless=true to suppress annoying dialog.

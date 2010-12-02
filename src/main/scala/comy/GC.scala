@@ -1,16 +1,15 @@
 package comy
 
-import xt.Logger
 import comy.model.DB
 
 /**
  * This Gabage Collector should be run periodically to remove old (expired) URL
  * entries.
  */
-object GC extends Logger {
+object GC {
   def main(args: Array[String]) {
-    logger.info("GC started")
+    println("GC started")
     DB.removeExpiredUrls
-    logger.info("GC stopped")
+    println("GC started")
   }
 }
