@@ -1,11 +1,7 @@
 package comy.controller
 
 import java.io.ByteArrayOutputStream
-import java.net.URI
-
 import javax.imageio.ImageIO
-import javax.ws.rs.{GET, POST, Path, PathParam, QueryParam, Produces}
-import javax.ws.rs.core.Response
 
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.j2se.MatrixToImageWriter
@@ -15,20 +11,23 @@ import com.google.zxing.qrcode.QRCodeWriter
 import comy.Config
 import comy.model.{DB, SaveUrlResult}
 
+import org.scalatra._
+
 object Api {
   val QR_CODE_WIDTH  = 150
   val QR_CODE_HEIGHT = 150
 }
 
-class Api {
+class Api extends ScalatraServlet {
   import Api._
 
   //beforeFilter("checkIpForShorten", Except("lengthen"))
 
-  @POST
-  @Path("/api/shorten")  // ?url=URL[&key=KEY]
-  def shorten(@PathParam("url") url: String, @QueryParam("key") key: String) = {
+  post("/api/shorten") {  // ?url=URL[&key=KEY]
+    val url = params("url")
+    val key = params("key")
     val keyo = if (key != null) Some(key) else None
+
     val (resultCode, resultString) = DB.saveUrl(url, keyo)
 
     val status = resultCode match {
@@ -38,13 +37,14 @@ class Api {
       case SaveUrlResult.ERROR     => 500
     }
 
-    if (status != 200) Response.status(status).build else resultString
+    response.setStatus(status)
+    if (status == 200) response.getWriter.print(resultString)
   }
 
   /** See: http://www.hascode.com/2010/05/playing-around-with-qr-codes/ */
-  @Path("/api/qrcode")  // ?url=xxx
-  @Produces(Array("image/png"))
-  def qrcode(@QueryParam("key") url: String) = {
+  get("/api/qrcode") {  // ?url=xxx
+    val url = params("url")
+
     val writer = new QRCodeWriter
     val mtx    = writer.encode(url, BarcodeFormat.QR_CODE, QR_CODE_WIDTH, QR_CODE_HEIGHT)
     invertImage(mtx)
@@ -52,20 +52,24 @@ class Api {
 
     val baos = new ByteArrayOutputStream
     ImageIO.write(image, "png", baos)
+
+    contentType = "image/png"
     baos.toByteArray
   }
 
-  @Path("/{key}")
-  def lengthen(@PathParam("key") key: String) {
+  get("/:key") {
+    val key = params("key")
+
     DB.getUrl(key) match {
       case Some(url) =>
         // Use 302 instead of 301 because:
         // * Some KDDI AU mobiles display annoying dialog for 301
         // * Not all browsers support HTTP/1.1
-        Response.seeOther(new URI(url)).build
+        response.setStatus(302)
+        redirect(url)
 
       case None =>
-        Response.status(404).build
+        response.setStatus(404)
     }
   }
 
