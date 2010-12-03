@@ -41,7 +41,7 @@ class Api extends ScalatraFilter {
   post("/api/shorten") {  // ?url=URL[&key=KEY]
     checkIpForShorten
 
-    val url = params("url")
+    val url  = params("url")
     val keyo = params.get("key")
 
     val (resultCode, resultString) = DB.saveUrl(url, keyo)
