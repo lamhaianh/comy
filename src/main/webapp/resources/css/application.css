@@ -19,12 +19,6 @@
   width: 540px;
 }
 
-label {
-  display: block;
-  width: 40px;
-  float: left;
-}
-
 #result {
   font-size: 2em;
 }

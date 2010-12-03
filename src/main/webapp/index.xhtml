@@ -8,28 +8,17 @@
 
   <ui:composition template="/layout.xhtml">
     <ui:define name="content_for_layout">
-      <label for="url">URL:</label>
-      <input id="url" type="text" value="http://mobion.jp/" tabindex="1" />
-      <br />
+      <h:form>
+        <h:panelGrid columns="2" cellpadding="5">
+          <h:outputLabel for="url">URL:</h:outputLabel>
+          <h:inputText id="url" value="#{tool.url}" />
 
-      <label for="key">Key:</label>
-      <input id="key" type="text" tabindex="2" />
-      <span>(optional, a-z A-Z 0-9 _ -)</span>
-      <br />
+          <h:outputLabel for="key">Key:</h:outputLabel>
+          <h:inputText id="key" value="#{tool.key}" title="(optional, a-z A-Z 0-9 _ -)" />
+        </h:panelGrid>
+        <h:commandButton value="Shorten" />
+      </h:form>
 
-      <input id="submit" type="submit" value="Shorten" tabindex="3" />
-      <br />
-      <br />
-
-      <hr />
-
-      <label>Result:</label>
-      <br />
-      <span id="result"></span>
-      <a id="open" href="" target="_blank">Open ↑</a>
-      <br />
-
-      <img id="qrcode" alt="QR code" width="150" height="150" src="" />
     </ui:define>
   </ui:composition>
 </html>

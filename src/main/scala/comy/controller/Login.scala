@@ -5,8 +5,7 @@ import scala.reflect.BeanProperty
 
 @ManagedBean
 class Login {
-  @BeanProperty
-  var username = ""
+  @BeanProperty var username = ""
 
   def gotoCso {
     println("hi")

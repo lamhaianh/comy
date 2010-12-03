@@ -5,20 +5,22 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.prime.com.tr/ui">
+
   <h:head>
     <meta content="text/html; charset=utf-8" http-equiv="content-type" />
     <title>URL Shortener</title>
 
-    <link rel="stylesheet" type="text/css" media="all" href="/css/reset.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="/css/text.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="/css/960_24_col.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="/css/smart_corners.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="/css/index.css" />
-
-    <script type="text/javascript" src="/js/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" src="/js/index.js"></script>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <h:outputStylesheet library="css/960" name="reset.css" />
+    <h:outputStylesheet library="css/960" name="text.css" />
+    <h:outputStylesheet library="css/960" name="960_24_col.css" />
+    <h:outputStylesheet library="css" name="smart_corners.css" />
+    <h:outputStylesheet library="css" name="application.css" />
   </h:head>
+
   <h:body>
+    <p:tooltip global="true"/>
+
     <div class="container_24">
       <div class="grid_15 prefix_3 suffix_6">
         <br />
