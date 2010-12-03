@@ -1,0 +1,7 @@
+input[id="form:url"] {
+  width: 540px;
+}
+
+#result {
+  font-size: 2em;
+}

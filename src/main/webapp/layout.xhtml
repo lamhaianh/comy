@@ -14,8 +14,10 @@
     <h:outputStylesheet library="css/960" name="reset.css" />
     <h:outputStylesheet library="css/960" name="text.css" />
     <h:outputStylesheet library="css/960" name="960_24_col.css" />
-    <h:outputStylesheet library="css" name="smart_corners.css" />
+    <h:outputStylesheet library="css/smart_corners" name="smart_corners.css" />
     <h:outputStylesheet library="css" name="application.css" />
+
+    <ui:insert name="head"></ui:insert>
   </h:head>
 
   <h:body>
@@ -33,7 +35,7 @@
             <h1 id="header">URL Shortener</h1>
           </a>
 
-          <ui:insert name="content_for_layout"></ui:insert>
+          <ui:insert name="body"></ui:insert>
 
           <div class="clear"></div>
 

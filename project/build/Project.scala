@@ -15,9 +15,9 @@ class Project(info: ProjectInfo) extends DefaultWebProject(info) {
 
   // Servlet container
   //val jetty7      = "org.eclipse.jetty" % "jetty-webapp" % "7.0.2.RC0" % "provided"
-  val jetty6      = "org.mortbay.jetty" % "jetty"        % "6.1.18"    % "test"
-  val jspApi      = "javax.servlet"     % "jsp-api"      % "2.0"       % "provided"
-  val jspCompiler = "org.mortbay.jetty" % "jsp"          % "5.5.12"    % "provided"
+  val jetty6      = "org.mortbay.jetty" % "jetty"        % "6.1.18" % "test"
+  val jspApi      = "org.mortbay.jetty" % "jsp-api-2.1"  % "6.1.14"
+  val jspCompiler = "org.mortbay.jetty" % "jsp"          % "5.5.12"
 
   val sonatype = "sonatype" at "https://oss.sonatype.org/content/repositories/releases"
 
@@ -30,12 +30,12 @@ class Project(info: ProjectInfo) extends DefaultWebProject(info) {
     // these 4 JARs
     "com.sun.faces"          % "jsf-api"   % "2.0.3",
     "com.sun.faces"          % "jsf-impl"  % "2.0.3",  // Does not work if set to "provided"
-    "javax.servlet.jsp.jstl" % "jstl-api"  % "1.2" % "test",
-    "org.glassfish.web"      % "jstl-impl" % "1.2" % "test",
+    "javax.servlet.jsp.jstl" % "jstl-api"  % "1.2",
+    "org.glassfish.web"      % "jstl-impl" % "1.2",
 
     // http://musingsofaprogrammingaddict.blogspot.com/2009/12/running-jsf-2-on-embedded-jetty.html
-    "javax.el"          % "el-api"  % "2.2" % "test",
-    "org.glassfish.web" % "el-impl" % "2.2" % "test",
+    "javax.el"          % "el-api"  % "2.2",
+    "org.glassfish.web" % "el-impl" % "2.2",
 
     // For REST API
     "org.scalatra" %% "scalatra" % "2.0.0.M2",

@@ -7,18 +7,33 @@
       xmlns:p="http://primefaces.prime.com.tr/ui">
 
   <ui:composition template="/layout.xhtml">
-    <ui:define name="content_for_layout">
-      <h:form>
+    <ui:define name="head">
+      <h:outputStylesheet library="css" name="index.css" />
+    </ui:define>
+
+    <ui:define name="body">
+      <h:form id="form">
         <h:panelGrid columns="2" cellpadding="5">
           <h:outputLabel for="url">URL:</h:outputLabel>
           <h:inputText id="url" value="#{tool.url}" />
 
           <h:outputLabel for="key">Key:</h:outputLabel>
-          <h:inputText id="key" value="#{tool.key}" title="(optional, a-z A-Z 0-9 _ -)" />
+          <h:panelGroup>
+            <h:inputText id="key" value="#{tool.key}" title="(optional, a-z A-Z 0-9 _ -)" />
+            <h:message for="key" class="error" />
+          </h:panelGroup>
         </h:panelGrid>
-        <h:commandButton value="Shorten" />
+        <h:commandButton value="Shorten" action="#{tool.shorten}" />
       </h:form>
 
+      <h:panelGroup layout="block" rendered="#{not empty tool.result}">
+        <br />
+        <hr />
+
+        <label>Result:</label><br />
+        <span id="result">#{tool.result}</span> <a href="#{tool.result}" target="_blank">Open ↑</a><br />
+        <img id="qrcode" alt="QR code" width="150" height="150" src="#{request.contextPath}/api/qrcode?url=#{tool.result}" />
+      </h:panelGroup>
     </ui:define>
   </ui:composition>
 </html>
