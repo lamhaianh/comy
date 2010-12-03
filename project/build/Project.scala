@@ -14,7 +14,8 @@ class Project(info: ProjectInfo) extends DefaultWebProject(info) {
   // Repos ---------------------------------------------------------------------
 
   // Servlet container
-  val jetty7      = "org.eclipse.jetty" % "jetty-webapp" % "7.0.2.RC0" % "provided"
+  //val jetty7      = "org.eclipse.jetty" % "jetty-webapp" % "7.0.2.RC0" % "provided"
+  val jetty6      = "org.mortbay.jetty" % "jetty"        % "6.1.18"    % "test"
   val jspApi      = "javax.servlet"     % "jsp-api"      % "2.0"       % "provided"
   val jspCompiler = "org.mortbay.jetty" % "jsp"          % "5.5.12"    % "provided"
 
@@ -29,12 +30,12 @@ class Project(info: ProjectInfo) extends DefaultWebProject(info) {
     // these 4 JARs
     "com.sun.faces"          % "jsf-api"   % "2.0.3",
     "com.sun.faces"          % "jsf-impl"  % "2.0.3",  // Does not work if set to "provided"
-    "javax.servlet.jsp.jstl" % "jstl-api"  % "1.2" % "provided",
-    "org.glassfish.web"      % "jstl-impl" % "1.2" % "provided",
+    "javax.servlet.jsp.jstl" % "jstl-api"  % "1.2" % "test",
+    "org.glassfish.web"      % "jstl-impl" % "1.2" % "test",
 
     // http://musingsofaprogrammingaddict.blogspot.com/2009/12/running-jsf-2-on-embedded-jetty.html
-    "javax.el"          % "el-api"  % "2.2" % "provided",
-    "org.glassfish.web" % "el-impl" % "2.2" % "provided",
+    "javax.el"          % "el-api"  % "2.2" % "test",
+    "org.glassfish.web" % "el-impl" % "2.2" % "test",
 
     // For REST API
     "org.scalatra" %% "scalatra" % "2.0.0.M2",
