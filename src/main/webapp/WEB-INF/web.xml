@@ -6,15 +6,14 @@
       http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
   version="2.5">
 
-  <servlet>
-    <servlet-name>Jersey</servlet-name>
-    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>Jersey</servlet-name>
-    <url-pattern>/api/*</url-pattern>
-  </servlet-mapping>
+  <filter>
+    <filter-name>API</filter-name>
+    <filter-class>comy.controller.Api</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>API</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
   <!-- -->
 

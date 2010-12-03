@@ -18,44 +18,9 @@ object Api {
   val QR_CODE_HEIGHT = 150
 }
 
-class Api extends ScalatraServlet {
+/** See ScalatraServlet vs. ScalatraFilter */
+class Api extends ScalatraFilter {
   import Api._
-
-  //beforeFilter("checkIpForShorten", Except("lengthen"))
-
-  post("/api/shorten") {  // ?url=URL[&key=KEY]
-    val url = params("url")
-    val key = params("key")
-    val keyo = if (key != null) Some(key) else None
-
-    val (resultCode, resultString) = DB.saveUrl(url, keyo)
-
-    val status = resultCode match {
-      case SaveUrlResult.VALID     => 200
-      case SaveUrlResult.INVALID   => 400
-      case SaveUrlResult.DUPLICATE => 409
-      case SaveUrlResult.ERROR     => 500
-    }
-
-    response.setStatus(status)
-    if (status == 200) response.getWriter.print(resultString)
-  }
-
-  /** See: http://www.hascode.com/2010/05/playing-around-with-qr-codes/ */
-  get("/api/qrcode") {  // ?url=xxx
-    val url = params("url")
-
-    val writer = new QRCodeWriter
-    val mtx    = writer.encode(url, BarcodeFormat.QR_CODE, QR_CODE_WIDTH, QR_CODE_HEIGHT)
-    invertImage(mtx)
-    val image  = MatrixToImageWriter.toBufferedImage(mtx)
-
-    val baos = new ByteArrayOutputStream
-    ImageIO.write(image, "png", baos)
-
-    contentType = "image/png"
-    baos.toByteArray
-  }
 
   get("/:key") {
     val key = params("key")
@@ -73,17 +38,48 @@ class Api extends ScalatraServlet {
     }
   }
 
+  post("/api/shorten") {  // ?url=URL[&key=KEY]
+    checkIpForShorten
+
+    val url = params("url")
+    val keyo = params.get("key")
+
+    val (resultCode, resultString) = DB.saveUrl(url, keyo)
+
+    val status = resultCode match {
+      case SaveUrlResult.VALID     => 200
+      case SaveUrlResult.INVALID   => 400
+      case SaveUrlResult.DUPLICATE => 409
+      case SaveUrlResult.ERROR     => 500
+    }
+
+    response.setStatus(status)
+    if (status == 200) response.getWriter.print(resultString)
+  }
+
+  /** See: http://www.hascode.com/2010/05/playing-around-with-qr-codes/ */
+  get("/api/qrcode") {  // ?url=xxx
+    checkIpForShorten
+
+    val url = params("url")
+
+    val writer = new QRCodeWriter
+    val mtx    = writer.encode(url, BarcodeFormat.QR_CODE, QR_CODE_WIDTH, QR_CODE_HEIGHT)
+    invertImage(mtx)
+    val image  = MatrixToImageWriter.toBufferedImage(mtx)
+
+    val baos = new ByteArrayOutputStream
+    ImageIO.write(image, "png", baos)
+
+    contentType = "image/png"
+    baos.toByteArray
+  }
+
   //----------------------------------------------------------------------------
 
-  protected def checkIpForShorten = {
-/*    if (Config.isApiAllowed(remoteIp)) {
-      true
-    } else {
-      response.setStatus(FORBIDDEN)
-      false
-    }
-*/
-    true
+  protected def checkIpForShorten {
+    val remoteIp = request.getRemoteAddr
+    if (!Config.isApiAllowed(remoteIp)) halt(403)
   }
 
   private def invertImage(mtx: ByteMatrix) {
