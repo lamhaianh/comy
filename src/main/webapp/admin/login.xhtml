@@ -8,12 +8,12 @@
   <ui:composition template="/WEB-INF/layout.xhtml">
     <ui:define name="body">
       <h:form>
-        <h:outputLabel for="username">Username:</h:outputLabel>
-        <h:inputText id="username" value="#{user.inputUsername}" required="true" requiredMessage="Please input username" />
+        <h:outputLabel for="username">#{msgs.username}:</h:outputLabel>
+        <h:inputText id="username" value="#{user.inputUsername}" required="true" requiredMessage="#{msgs.username_required}" />
         <h:message for="username" class="error"/>
         <br />
         <br />
-        <h:commandButton value="Password &raquo;" action="#{user.gotoCso}" />
+        <h:commandButton value="#{msgs.password} &raquo;" action="#{user.gotoCso}" />
       </h:form>
     </ui:define>
   </ui:composition>

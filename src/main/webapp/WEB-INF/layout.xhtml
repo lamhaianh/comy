@@ -38,12 +38,12 @@
 
           <h:form rendered="#{loggedIn}">
             #{user.loggedInUsername} |
-            <h:outputLink value="#{pageContext.request.contextPath}/admin/stats.gnt">Statistics</h:outputLink> |
-            <h:commandLink action="#{user.logout}" value="Logout" />
+            <h:outputLink value="#{pageContext.request.contextPath}/admin/stats.gnt">#{msgs.stats}</h:outputLink> |
+            <h:commandLink action="#{user.logout}" value="#{msgs.logout}" />
           </h:form>
 
           <h:outputLink rendered="#{not loggedIn}" value="#{pageContext.request.contextPath}/admin/login.gnt">
-            Admin login
+            #{msgs.admin_login}
             <br />
           </h:outputLink>
 
