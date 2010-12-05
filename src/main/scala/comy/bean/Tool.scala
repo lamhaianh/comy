@@ -1,4 +1,4 @@
-package comy.controller
+package comy.bean
 
 import javax.faces.application.FacesMessage
 import javax.faces.bean.ManagedBean
@@ -21,10 +21,10 @@ class Tool {
 
     val (resultCode, resultString) = DB.saveUrl(url, keyo)
     val message = resultCode match {
-      case SaveUrlResult.VALID     => ""
-      case SaveUrlResult.INVALID   => "Invalid key"
-      case SaveUrlResult.DUPLICATE => "Duplicated key"
-      case SaveUrlResult.ERROR     => "Server error"
+      case SaveUrlResult.VALID      => ""
+      case SaveUrlResult.INVALID    => "Invalid key"
+      case SaveUrlResult.DUPLICATED => "Duplicated key"
+      case SaveUrlResult.ERROR      => "Server error"
     }
 
     val facesContext = FacesContext.getCurrentInstance

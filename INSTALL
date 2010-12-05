@@ -8,16 +8,10 @@
 Comy supports Replica Set, see:
 http://www.mongodb.org/display/DOCS/Replica+Sets
 
-Edit config.properties to suit your environment. You may also need to edit
-http.sh to change the JVM memory option.
-
-== Run
-
-bin/xitrum
+Edit config.properties and logback.xml to suit your environment.
 
 == Remove old data
 
-You may need to remove URL entries that are not accessed for a long time:
-bin/xitrum gc
+TODO
 
 You may need to the command to be run periodically.

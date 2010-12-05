@@ -1,4 +1,4 @@
-package comy.controller
+package comy.bean
 
 import java.io.Serializable
 import javax.faces.bean.{ManagedBean, SessionScoped}
@@ -16,11 +16,11 @@ class User extends Serializable {
   def logout = {
     val session = FacesContext.getCurrentInstance.getExternalContext.getSession(false).asInstanceOf[HttpSession]
     session.invalidate
-    "/index?faces-redirect=true"
+    "/user/index?faces-redirect=true"
   }
 
   def gotoCso = {
     loggedInUsername = inputUsername
-    "/index?faces-redirect=true"
+    "/user/index?faces-redirect=true"
   }
 }

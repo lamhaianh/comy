@@ -32,10 +32,10 @@ object DBAdminColl {
 
 object SaveUrlResult extends Enumeration {
   type SaveUrlResult = Value
-  val VALID     = Value
-  val INVALID   = Value
-  val DUPLICATE = Value
-  val ERROR     = Value
+  val VALID      = Value
+  val INVALID    = Value
+  val DUPLICATED = Value
+  val ERROR      = Value
 }
 
 /**
@@ -133,7 +133,7 @@ object DB {
             if (url2 == url)
               (SaveUrlResult.VALID, key)
             else
-              (SaveUrlResult.DUPLICATE, "The key has been chosen")
+              (SaveUrlResult.DUPLICATED, "The key has been chosen")
         }
       } catch {
         case e: Exception =>

@@ -1,27 +1,12 @@
 package comy.controller
 
-import java.io.ByteArrayOutputStream
-import javax.imageio.ImageIO
-
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.client.j2se.MatrixToImageWriter
-import com.google.zxing.common.ByteMatrix
-import com.google.zxing.qrcode.QRCodeWriter
-
 import comy.Config
 import comy.model.{DB, SaveUrlResult}
 
-import org.scalatra._
-
-object Api {
-  val QR_CODE_WIDTH  = 150
-  val QR_CODE_HEIGHT = 150
-}
+import org.scalatra.ScalatraFilter
 
 /** See ScalatraServlet vs. ScalatraFilter */
 class Api extends ScalatraFilter {
-  import Api._
-
   get("/:key") {
     val key = params("key")
 
@@ -49,32 +34,14 @@ class Api extends ScalatraFilter {
     val (resultCode, resultString) = DB.saveUrl(url, keyo)
 
     val status = resultCode match {
-      case SaveUrlResult.VALID     => 200
-      case SaveUrlResult.INVALID   => 400
-      case SaveUrlResult.DUPLICATE => 409
-      case SaveUrlResult.ERROR     => 500
+      case SaveUrlResult.VALID      => 200
+      case SaveUrlResult.INVALID    => 400
+      case SaveUrlResult.DUPLICATED => 409
+      case SaveUrlResult.ERROR      => 500
     }
 
     response.setStatus(status)
     if (status == 200) response.getWriter.print(resultString)
-  }
-
-  /** See: http://www.hascode.com/2010/05/playing-around-with-qr-codes/ */
-  get("/api/qrcode") {  // ?url=xxx
-    checkIpForShorten
-
-    val url = params("url")
-
-    val writer = new QRCodeWriter
-    val mtx    = writer.encode(url, BarcodeFormat.QR_CODE, QR_CODE_WIDTH, QR_CODE_HEIGHT)
-    invertImage(mtx)
-    val image  = MatrixToImageWriter.toBufferedImage(mtx)
-
-    val baos = new ByteArrayOutputStream
-    ImageIO.write(image, "png", baos)
-
-    contentType = "image/png"
-    baos.toByteArray
   }
 
   //----------------------------------------------------------------------------
@@ -82,12 +49,5 @@ class Api extends ScalatraFilter {
   protected def checkIpForShorten {
     val remoteIp = request.getRemoteAddr
     if (!Config.isApiAllowed(remoteIp)) halt(403)
-  }
-
-  private def invertImage(mtx: ByteMatrix) {
-    for (w <- 0 until mtx.getWidth; h <- 0 until mtx.getHeight) {
-      val inverted = if (mtx.get(w, h) == 0x00) 0xFF else 0x00
-      mtx.set(w, h, inverted)
-    }
   }
 }

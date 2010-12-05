@@ -43,11 +43,7 @@ class Project(info: ProjectInfo) extends DefaultWebProject(info) {
     // For Admin UI
     "org.primefaces" % "primefaces" % "2.2.RC2",
 
-    "ch.qos.logback" %  "logback-classic"   % "0.9.26",
-    "org.mongodb"    %  "mongo-java-driver" % "2.3"
+    "ch.qos.logback" % "logback-classic"   % "0.9.26",
+    "org.mongodb"    % "mongo-java-driver" % "2.3"
   ) ++ super.libraryDependencies
-
-  // Paths ---------------------------------------------------------------------
-
-  override def unmanagedClasspath = super.unmanagedClasspath +++ ("config")
 }
