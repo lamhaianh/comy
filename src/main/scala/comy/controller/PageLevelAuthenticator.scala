@@ -5,13 +5,12 @@ import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
 import comy.bean.User
 
-object OpenIdAdminChecker {
+object PageLevelAuthenticator {
   val LOGIN_PATH = "/admin/login.gnt"
 }
 
-/** Authentication using CSO */
-class OpenIdAdminChecker extends Filter {
-  import OpenIdAdminChecker._
+class PageLevelAuthenticator extends Filter {
+  import PageLevelAuthenticator._
 
   def init(config: FilterConfig) {}
 

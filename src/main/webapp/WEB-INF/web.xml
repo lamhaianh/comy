@@ -43,12 +43,12 @@
   <!-- -->
 
   <filter>
-    <filter-name>AdminChecker</filter-name>
-    <filter-class>comy.controller.OpenIdAdminChecker</filter-class>
+    <filter-name>PageLevelAuthenticator</filter-name>
+    <filter-class>comy.controller.PageLevelAuthenticator</filter-class>
   </filter>
   
   <filter-mapping>
-    <filter-name>AdminChecker</filter-name>
+    <filter-name>PageLevelAuthenticator</filter-name>
     <url-pattern>/admin/*</url-pattern>
   </filter-mapping>
 

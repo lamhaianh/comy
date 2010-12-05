@@ -11,6 +11,7 @@ import comy.Config
 
 object DBUrlColl {
   val COLL         = "urls"
+
   val KEY          = "key"
   val URL          = "url"
   val ACCESS_COUNT = "access_count"

@@ -21,6 +21,6 @@ class User extends Serializable {
 
   def gotoCso = {
     loggedInUsername = inputUsername
-    "/user/index?faces-redirect=true"
+    "/admin/stats?faces-redirect=true"
   }
 }
