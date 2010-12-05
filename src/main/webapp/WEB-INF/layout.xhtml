@@ -8,7 +8,7 @@
 
   <h:head>
     <meta content="text/html; charset=utf-8" http-equiv="content-type" />
-    <title>URL Shortener</title>
+    <title>#{msgs.app_name}</title>
 
     <link type="image/x-icon" rel="shortcut icon" href="#{pageContext.request.contextPath}/img/favicon.ico" />
 
@@ -31,7 +31,7 @@
           <span class="tr"></span>
 
           <h:outputLink value="#{pageContext.request.contextPath}/user/index.gnt">
-            <h1 id="header">URL Shortener</h1>
+            <h1 id="header">#{msgs.app_name}</h1>
           </h:outputLink>
 
           <c:set var="loggedIn" value="#{not empty user.loggedInUsername}" />
