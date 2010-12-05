@@ -6,18 +6,6 @@
       http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
   version="2.5">
 
-  <!-- When using Mojarra 2.x, enable allowTextChildren configuration -->
-  <context-param>
-    <param-name>com.sun.faces.allowTextChildren</param-name>
-    <param-value>true</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sun.faces.expressionFactory</param-name>
-    <param-value>com.sun.el.ExpressionFactoryImpl</param-value>
-  </context-param>
-
-  <!-- -->
-
   <filter>
     <filter-name>API</filter-name>
     <filter-class>comy.controller.Api</filter-class>

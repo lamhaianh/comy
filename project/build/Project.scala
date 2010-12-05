@@ -14,10 +14,7 @@ class Project(info: ProjectInfo) extends DefaultWebProject(info) {
   // Repos ---------------------------------------------------------------------
 
   // Servlet container
-  //val jetty7      = "org.eclipse.jetty" % "jetty-webapp" % "7.0.2.RC0" % "provided"
-  val jetty6      = "org.mortbay.jetty" % "jetty"        % "6.1.18" % "test"
-  val jspApi      = "org.mortbay.jetty" % "jsp-api-2.1"  % "6.1.14"
-  val jspCompiler = "org.mortbay.jetty" % "jsp"          % "5.5.12"
+  val jetty7 = "org.eclipse.jetty" % "jetty-webapp" % "7.2.0.v20101020" % "test"
 
   val sonatype = "sonatype" at "https://oss.sonatype.org/content/repositories/releases"
 
@@ -34,7 +31,6 @@ class Project(info: ProjectInfo) extends DefaultWebProject(info) {
     "org.glassfish.web"      % "jstl-impl" % "1.2",
 
     // http://musingsofaprogrammingaddict.blogspot.com/2009/12/running-jsf-2-on-embedded-jetty.html
-    "javax.el"          % "el-api"  % "2.2",
     "org.glassfish.web" % "el-impl" % "2.2",
 
     // For REST API
