@@ -3,8 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui">
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
   <h:head>
     <meta content="text/html; charset=utf-8" http-equiv="content-type" />
@@ -21,8 +20,6 @@
   </h:head>
 
   <h:body>
-    <p:tooltip global="true"/>
-
     <div class="container_24">
       <div class="grid_15 prefix_3 suffix_6">
         <br />
@@ -31,9 +28,22 @@
         <div id="csc">
           <span class="tr"></span>
 
-          <a href="/">
+          <h:outputLink value="#{pageContext.request.contextPath}/">
             <h1 id="header">URL Shortener</h1>
-          </a>
+          </h:outputLink>
+
+          <h:form rendered="#{not empty user.loggedInUsername}">
+            #{user.loggedInUsername} |
+            <h:outputLink value="#{pageContext.request.contextPath}/admin/stats.xhtml">Statistics</h:outputLink> |
+            <h:commandLink action="#{user.logout}" value="Logout" />
+          </h:form>
+
+          <h:outputLink rendered="#{empty user.loggedInUsername}" value="#{pageContext.request.contextPath}/admin/login.xhtml">
+            Admin login
+            <br />
+          </h:outputLink>
+
+          <br />
 
           <ui:insert name="body"></ui:insert>
 

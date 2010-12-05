@@ -1,25 +1,25 @@
 package comy.controller
 
-import scala.reflect.BeanProperty
 import javax.faces.application.FacesMessage
-import javax.faces.bean._
+import javax.faces.bean.ManagedBean
 import javax.faces.context.FacesContext
 import javax.servlet.http.HttpServletRequest
+import scala.reflect.BeanInfo
 
 import comy.model.{DB, SaveUrlResult}
 
 @ManagedBean
+@BeanInfo
 class Tool {
-  @BeanProperty var url    = "http://mobion.jp/"
-  @BeanProperty var key    = ""
-  @BeanProperty var result = ""
+  var url    = "http://mobion.jp/"
+  var key    = ""
+  var result = ""
 
   def shorten {
     key = key.trim
     val keyo = if (key.isEmpty) None else Some(key)
 
     val (resultCode, resultString) = DB.saveUrl(url, keyo)
-
     val message = resultCode match {
       case SaveUrlResult.VALID     => ""
       case SaveUrlResult.INVALID   => "Invalid key"

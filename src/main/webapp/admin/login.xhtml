@@ -3,17 +3,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui">
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
   <ui:composition template="/layout.xhtml">
     <ui:define name="body">
-      <h3>Login</h3>
-
       <h:form>
-        <label>Username:</label>
-        <h:inputText value="#{login.username}" />
-        <h:commandButton value="Password &raquo;" action="#{login.gotoCso}"/>
+        <h:outputLabel for="username">Username:</h:outputLabel>
+        <h:inputText id="username" value="#{user.inputUsername}" required="true" requiredMessage="Please input username" />
+        <h:message for="username" class="error"/>
+        <br />
+        <br />
+        <h:commandButton value="Password &raquo;" action="#{user.gotoCso}" />
       </h:form>
     </ui:define>
   </ui:composition>

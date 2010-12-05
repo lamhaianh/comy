@@ -56,4 +56,17 @@
     <!-- http://stackoverflow.com/questions/3297634/explicit-directory-for-jsf-template-files -->
     <welcome-file>index.xhtml</welcome-file>
   </welcome-file-list>
+
+  <!-- Protect admin pages -->
+  <security-constraint>
+    <web-resource-collection>
+      <url-pattern>/admin/stats.xhtml</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+  <security-role>
+    <role-name>admin</role-name>
+  </security-role>
 </web-app>

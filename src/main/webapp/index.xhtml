@@ -3,8 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui">
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
   <ui:composition template="/layout.xhtml">
     <ui:define name="head">
@@ -23,17 +22,21 @@
             <h:message for="key" class="error" />
           </h:panelGroup>
         </h:panelGrid>
-        <h:commandButton value="Shorten" action="#{tool.shorten}" />
+
+        <h:commandButton value="Shorten" action="#{tool.shorten}">
+          <f:ajax execute="url key" render="resultPanel" />
+        </h:commandButton>
+
+        <h:panelGroup id="resultPanel">
+          <h:panelGroup layout="block" rendered="#{not empty tool.result}">
+            <br />
+            <hr />
+
+            <span id="result">#{tool.result}</span> <a href="#{tool.result}" target="_blank">Open ↑</a><br />
+            <img id="qrcode" alt="QR code" width="150" height="150" src="#{request.contextPath}/api/qrcode?url=#{tool.result}" />
+          </h:panelGroup>
+        </h:panelGroup>
       </h:form>
-
-      <h:panelGroup layout="block" rendered="#{not empty tool.result}">
-        <br />
-        <hr />
-
-        <label>Result:</label><br />
-        <span id="result">#{tool.result}</span> <a href="#{tool.result}" target="_blank">Open ↑</a><br />
-        <img id="qrcode" alt="QR code" width="150" height="150" src="#{request.contextPath}/api/qrcode?url=#{tool.result}" />
-      </h:panelGroup>
     </ui:define>
   </ui:composition>
 </html>
