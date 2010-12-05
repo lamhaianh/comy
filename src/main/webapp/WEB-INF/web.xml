@@ -24,12 +24,12 @@
 
   <servlet-mapping>
     <servlet-name>JSF</servlet-name>
-    <url-pattern>*.xhtml</url-pattern>
+    <url-pattern>*.gnt</url-pattern>
   </servlet-mapping>
 
   <context-param>
     <param-name>javax.faces.PROJECT_STAGE</param-name>
-    <param-value>Development</param-value>
+    <param-value>Production</param-value>
   </context-param>
 
   <servlet>
@@ -54,18 +54,29 @@
 
   <welcome-file-list>
     <!-- http://stackoverflow.com/questions/3297634/explicit-directory-for-jsf-template-files -->
-    <welcome-file>index.xhtml</welcome-file>
+    <welcome-file>index.html</welcome-file>
   </welcome-file-list>
+
+  <!-- Hide JSF templates -->
+  <security-constraint>
+    <web-resource-collection>
+      <url-pattern>*.xhtml</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>Hide JSF templates</role-name>
+    </auth-constraint>
+  </security-constraint>
 
   <!-- Protect admin pages -->
   <security-constraint>
     <web-resource-collection>
-      <url-pattern>/admin/stats.xhtml</url-pattern>
+      <url-pattern>/admin/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>admin</role-name>
     </auth-constraint>
   </security-constraint>
+
   <security-role>
     <role-name>admin</role-name>
   </security-role>

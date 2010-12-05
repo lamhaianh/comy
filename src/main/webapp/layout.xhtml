@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
   <h:head>
@@ -32,13 +33,15 @@
             <h1 id="header">URL Shortener</h1>
           </h:outputLink>
 
-          <h:form rendered="#{not empty user.loggedInUsername}">
+          <c:set var="loggedIn" value="#{not empty user.loggedInUsername}" />
+
+          <h:form rendered="#{loggedIn}">
             #{user.loggedInUsername} |
-            <h:outputLink value="#{pageContext.request.contextPath}/admin/stats.xhtml">Statistics</h:outputLink> |
+            <h:outputLink value="#{pageContext.request.contextPath}/admin/stats.gnt">Statistics</h:outputLink> |
             <h:commandLink action="#{user.logout}" value="Logout" />
           </h:form>
 
-          <h:outputLink rendered="#{empty user.loggedInUsername}" value="#{pageContext.request.contextPath}/admin/login.xhtml">
+          <h:outputLink rendered="#{not loggedIn}" value="#{pageContext.request.contextPath}/login.gnt">
             Admin login
             <br />
           </h:outputLink>

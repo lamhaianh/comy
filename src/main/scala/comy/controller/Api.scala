@@ -34,7 +34,9 @@ class Api extends ScalatraFilter {
         redirect(url)
 
       case None =>
-        response.setStatus(404)
+        // Pass to other filters/servlets instead of just
+        // response.setStatus(404)
+        pass
     }
   }
 
