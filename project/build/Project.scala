@@ -39,7 +39,8 @@ class Project(info: ProjectInfo) extends DefaultWebProject(info) {
     // For Admin UI
     "org.primefaces" % "primefaces" % "2.2.RC2",
 
-    "ch.qos.logback" % "logback-classic"   % "0.9.26",
-    "org.mongodb"    % "mongo-java-driver" % "2.3"
+    "ch.qos.logback"  % "logback-classic"      % "0.9.26",
+    "org.mongodb"     % "mongo-java-driver"    % "2.3",
+    "org.openid4java" % "openid4java-consumer" % "0.9.5"
   ) ++ super.libraryDependencies
 }

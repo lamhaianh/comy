@@ -18,6 +18,8 @@ object Config {
   val dbName               = properties.getProperty("db.name")
   val dbExpirationDays     = properties.getProperty("db.expiration_days").toInt
 
+  val openIdFormat = properties.getProperty("open_id_format")
+
   def isApiAllowed(ip: String) = apiIps.exists { ip2 =>
     (ip2 == "*") || (ip2 == ip)
   }

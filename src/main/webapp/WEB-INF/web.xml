@@ -6,83 +6,84 @@
       http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
   version="2.5">
 
+  <!-- Scalantra filters -->
+
   <filter>
     <filter-name>API</filter-name>
     <filter-class>comy.controller.Api</filter-class>
   </filter>
-
-  <filter-mapping>
-    <filter-name>API</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-
-  <!-- -->
-
   <filter>
     <filter-name>QrCode</filter-name>
     <filter-class>comy.controller.QrCode</filter-class>
   </filter>
 
   <filter-mapping>
+    <filter-name>API</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
     <filter-name>QrCode</filter-name>
     <url-pattern>/user/qrcode</url-pattern>
   </filter-mapping>
 
-  <!-- -->
+  <!-- Protect JSF admin pages -->
 
   <filter>
     <filter-name>PageLevelAuthenticator</filter-name>
     <filter-class>comy.controller.PageLevelAuthenticator</filter-class>
   </filter>
-  
+  <filter>
+    <filter-name>OpenIdReturnPoint</filter-name>
+    <filter-class>comy.controller.OpenIdReturnPoint</filter-class>
+  </filter>
+
   <filter-mapping>
     <filter-name>PageLevelAuthenticator</filter-name>
     <url-pattern>/admin/*</url-pattern>
   </filter-mapping>
+  <filter-mapping>
+    <filter-name>OpenIdReturnPoint</filter-name>
+    <url-pattern>/open_id_return_point</url-pattern>
+  </filter-mapping>
 
-  <!-- -->
-
-  <servlet>
-    <servlet-name>FacesServlet</servlet-name>
-    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>FacesServlet</servlet-name>
-    <url-pattern>*.gnt</url-pattern>
-  </servlet-mapping>
+  <!-- JSF -->
 
   <context-param>
     <param-name>javax.faces.PROJECT_STAGE</param-name>
     <param-value>Production</param-value>
   </context-param>
 
-  <!-- Hide JSF templates -->
+  <!-- Hide JSF .xhtml templates -->
   <security-constraint>
     <web-resource-collection>
       <url-pattern>*.xhtml</url-pattern>
     </web-resource-collection>
     <auth-constraint>
-      <role-name>Hide JSF templates</role-name>
+      <role-name>Hide JSF .xhtml templates</role-name>
     </auth-constraint>
   </security-constraint>
 
-  <!-- -->
+  <servlet>
+    <servlet-name>FacesServlet</servlet-name>
+    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FacesServlet</servlet-name>
+    <url-pattern>*.gnt</url-pattern>
+  </servlet-mapping>
 
   <servlet>
     <servlet-name>PrimeFaces</servlet-name>
     <servlet-class>org.primefaces.resource.ResourceServlet</servlet-class>
   </servlet>
-
   <servlet-mapping>
     <servlet-name>PrimeFaces</servlet-name>
     <url-pattern>/primefaces_resource/*</url-pattern>
   </servlet-mapping>
 
-  <!-- -->
+  <!-- http://stackoverflow.com/questions/3297634/explicit-directory-for-jsf-template-files -->
 
   <welcome-file-list>
-    <!-- http://stackoverflow.com/questions/3297634/explicit-directory-for-jsf-template-files -->
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
 </web-app>

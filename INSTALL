@@ -10,6 +10,18 @@ http://www.mongodb.org/display/DOCS/Replica+Sets
 
 Edit config.properties and logback.xml to suit your environment.
 
+== Self-signed key HTTPS OpenID provider
+
+See open_id_format in config.properties.
+
+If you use a HTTPS OpenID provider which uses self-signed key. You may need to
+read:
+http://blogs.sun.com/gc/entry/unable_to_find_valid_certification
+
+Note that on MacOS X, the equivalence of
+$JAVA_HOME/jre/lib/security is
+/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/lib/security
+
 == Remove old data
 
 TODO

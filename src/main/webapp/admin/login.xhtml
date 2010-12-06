@@ -7,7 +7,7 @@
 
   <ui:composition template="/WEB-INF/layout.xhtml">
     <ui:define name="body">
-      <h:form>
+      <h:form id="form">
         <h:outputLabel for="username">#{msgs.username}:</h:outputLabel>
         <h:inputText id="username" value="#{user.inputUsername}" required="true" requiredMessage="#{msgs.username_required}" />
         <h:message for="username" class="error"/>
