@@ -16,9 +16,9 @@ object DBUrlColl {
   val URL          = "url"
   val ACCESS_COUNT = "access_count"
 
-  // The difference, measured in DAYS, between today and January 1, 1970 UTC.
-  val CREATED_ON   = "created_on"
-  val UPDATED_ON   = "updated_on"  // The date when ACCESS_COUNT is incremented
+  // The difference, measured in SECONDS, between today and January 1, 1970 UTC.
+  val CREATED_AT   = "created_at"
+  val UPDATED_AT   = "updated_at"  // When ACCESS_COUNT is incremented
 }
 
 // TODO: for storing API IPs
@@ -90,10 +90,10 @@ object DB {
    */
   def removeExpiredUrls: Boolean = {
     try {
-      val expirationDate = today - Config.dbExpirationDays
+      val expirationDate = currentTimeSecs - Config.dbExpirationDays*24*60*60
       val query = new BasicDBObject
       query.put(ACCESS_COUNT, 0)
-      query.put(UPDATED_ON,   new BasicDBObject("$lte", expirationDate))
+      query.put(UPDATED_AT,   new BasicDBObject("$lte", expirationDate))
       val result = coll.find(query)
       while (result.hasNext) {
         coll.remove(result.next)
@@ -113,7 +113,7 @@ object DB {
     // based on each one separately
     coll.ensureIndex(new BasicDBObject(KEY,        1))
     coll.ensureIndex(new BasicDBObject(URL,        1))
-    coll.ensureIndex(new BasicDBObject(UPDATED_ON, 1))
+    coll.ensureIndex(new BasicDBObject(UPDATED_AT, 1))
   }
 
     /**
@@ -212,7 +212,7 @@ object DB {
         // This may not be accurate when there are many concurrent requests to the same key!
         val resultUpdate = new BasicDBObject("$inc", new BasicDBObject(ACCESS_COUNT, 1))
 
-        resultUpdate.append("$set", new BasicDBObject(UPDATED_ON, today))
+        resultUpdate.append("$set", new BasicDBObject(UPDATED_AT, currentTimeSecs))
         coll.update(result, resultUpdate)
       }
       Some(result.get(URL).toString)
@@ -226,14 +226,14 @@ object DB {
    */
   private def addNewUrl(key: String, url: String) {
     val doc = new BasicDBObject
-    val d = today
+    val s = currentTimeSecs
     doc.put(KEY,          key)
     doc.put(URL,          url)
     doc.put(ACCESS_COUNT, 0)
-    doc.put(CREATED_ON,   d)
-    doc.put(UPDATED_ON,   d)
+    doc.put(CREATED_AT,   s)
+    doc.put(UPDATED_AT,   s)
     coll.insert(doc)
   }
 
-  private def today = (System.currentTimeMillis/1000/(24*60*60)).asInstanceOf[Int]
+  private def currentTimeSecs = (System.currentTimeMillis/1000).asInstanceOf[Int]
 }
