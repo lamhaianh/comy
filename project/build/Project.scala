@@ -20,8 +20,9 @@ class Project(info: ProjectInfo) extends DefaultWebProject(info) {
   val primeFacesRepo = "PrimeFaces" at "http://repository.prime.com.tr"
 
   override def libraryDependencies = Set(
-    "javax.servlet" % "servlet-api" % "2.5",
-    "javax.faces"   % "jsf-api"     % "2.0",
+    "javax.servlet" % "servlet-api" % "2.5",  // For compiling servlets
+    "javax.el"      % "el-api"      % "2.2",  // Required by jsf-api
+    "javax.faces"   % "jsf-api"     % "2.0",  // For compiling beans
 
     // For REST API
     "org.scalatra" %% "scalatra" % "2.0.0.M2",

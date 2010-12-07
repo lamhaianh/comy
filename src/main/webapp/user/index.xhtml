@@ -24,17 +24,15 @@
         </h:panelGrid>
 
         <h:commandButton value="#{msgs.shorten}" action="#{tool.shorten}">
-          <f:ajax execute="url key" render="resultPanel" />
+          <f:ajax execute="url key" render="@form" />
         </h:commandButton>
 
-        <h:panelGroup id="resultPanel">
-          <h:panelGroup layout="block" rendered="#{not empty tool.result}">
-            <br />
-            <hr />
+        <h:panelGroup layout="block" rendered="#{not empty tool.result}">
+          <br />
+          <hr />
 
-            <span id="result">#{tool.result}</span> <a href="#{tool.result}" target="_blank">#{msgs.open} ↑</a><br />
-            <img id="qrcode" alt="QR code" width="150" height="150" src="#{request.contextPath}/user/qrcode?url=#{tool.result}" />
-          </h:panelGroup>
+          <span id="result">#{tool.result}</span> <a href="#{tool.result}" target="_blank">#{msgs.open} ↑</a><br />
+          <img id="qrcode" alt="QR code" width="150" height="150" src="#{request.contextPath}/user/qrcode?url=#{tool.result}" />
         </h:panelGroup>
       </h:form>
     </ui:define>

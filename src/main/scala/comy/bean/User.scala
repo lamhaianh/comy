@@ -20,6 +20,8 @@ import comy.Config
 @ManagedBean
 @SessionScoped
 class User extends Serializable {
+  import Msgs._
+
   val logger = LoggerFactory.getLogger(getClass)
 
   @BeanProperty var loggedInUsername: String = null
@@ -40,18 +42,18 @@ class User extends Serializable {
       if (checkUsername(inputUsername)) {
         val code = redirectToOpenIdProvider(inputUsername)
         if (code < 0) {
-          Some("Server error")
+          Some(msgs("openid_server_error"))
         } else if (code > 0) {
           if (code == 0x704) {  // Probably the remote server is HTTPS without valid key
-            Some("Bad OpenID provider")
+            Some(msgs("openid_bad_provider"))
           } else {
-            Some("Invalid username")
+            Some(msgs("openid_invalid"))
           }
         } else {  // == 0
           None
         }
       } else {
-        Some("Unregistered username")
+        Some(msgs("openid_unregistered"))
       }
 
     if (errorMsgo != None) {

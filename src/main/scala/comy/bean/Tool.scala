@@ -11,6 +11,8 @@ import comy.model.{DB, SaveUrlResult}
 @ManagedBean
 @BeanInfo
 class Tool {
+  import Msgs._
+
   var url    = "http://mobion.jp/"
   var key    = ""
   var result = ""
@@ -22,9 +24,9 @@ class Tool {
     val (resultCode, resultString) = DB.saveUrl(url, keyo)
     val message = resultCode match {
       case SaveUrlResult.VALID      => ""
-      case SaveUrlResult.INVALID    => "Invalid key"
-      case SaveUrlResult.DUPLICATED => "Duplicated key"
-      case SaveUrlResult.ERROR      => "Server error"
+      case SaveUrlResult.INVALID    => msgs("key_invalid")
+      case SaveUrlResult.DUPLICATED => msgs("key_duplicated")
+      case SaveUrlResult.ERROR      => msgs("server_error")
     }
 
     val facesContext = FacesContext.getCurrentInstance
