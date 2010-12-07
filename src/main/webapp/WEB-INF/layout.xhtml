@@ -10,13 +10,13 @@
     <meta content="text/html; charset=utf-8" http-equiv="content-type" />
     <title>#{msgs.app_name}</title>
 
-    <link type="image/x-icon" rel="shortcut icon" href="#{pageContext.request.contextPath}/img/favicon.ico" />
+    <link type="image/x-icon" rel="shortcut icon" href="#{resource['comy:img/favicon.ico']}" />
 
-    <link type="text/css" rel="stylesheet" href="#{pageContext.request.contextPath}/css/960/reset.css" />
-    <link type="text/css" rel="stylesheet" href="#{pageContext.request.contextPath}/css/960/text.css" />
-    <link type="text/css" rel="stylesheet" href="#{pageContext.request.contextPath}/css/960/960_24_col.css" />
-    <link type="text/css" rel="stylesheet" href="#{pageContext.request.contextPath}/css/smart_corners/smart_corners.css" />
-    <link type="text/css" rel="stylesheet" href="#{pageContext.request.contextPath}/css/application.css" />
+    <h:outputStylesheet library="comy" name="css/960/reset.css"/>
+    <h:outputStylesheet library="comy" name="css/960/text.css"/>
+    <h:outputStylesheet library="comy" name="css/960/960_24_col.css"/>
+    <h:outputStylesheet library="comy" name="css/smart_corners/smart_corners.css"/>
+    <h:outputStylesheet library="comy" name="css/application.css"/>
 
     <ui:insert name="head"></ui:insert>
   </h:head>

@@ -6,6 +6,16 @@
       http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
   version="2.5">
 
+  <!-- Prevent java.lang.IllegalStateException: Application was not properly initialized at startup, could not find Factory: javax.faces.context.FacesContextFactory -->
+
+  <listener>
+    <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
+  </listener>
+
+  <listener>
+    <listener-class>com.sun.faces.application.WebappLifecycleListener</listener-class>
+  </listener>
+  
   <!-- Scalantra filters -->
 
   <filter>
@@ -50,7 +60,7 @@
 
   <context-param>
     <param-name>javax.faces.PROJECT_STAGE</param-name>
-    <param-value>Production</param-value>
+    <param-value>Development</param-value>
   </context-param>
 
   <!-- Hide JSF .xhtml templates -->
@@ -71,15 +81,6 @@
   <servlet-mapping>
     <servlet-name>FacesServlet</servlet-name>
     <url-pattern>*.gnt</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>PrimeFaces</servlet-name>
-    <servlet-class>org.primefaces.resource.ResourceServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>PrimeFaces</servlet-name>
-    <url-pattern>/primefaces_resource/*</url-pattern>
   </servlet-mapping>
 
   <!-- http://stackoverflow.com/questions/3297634/explicit-directory-for-jsf-template-files -->
