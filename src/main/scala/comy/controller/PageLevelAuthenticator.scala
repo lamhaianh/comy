@@ -28,6 +28,10 @@ class PageLevelAuthenticator extends Filter {
     if (httpRequest.getServletPath == LOGIN_PAGE) {
       chain.doFilter(request, response)
     } else {
+      // Check login
+      // The user has logged in if there is "user" bean in the session and
+      // loggedInUsername != null
+
       val user = httpRequest.getSession.getAttribute("user")
       if (user == null)
         httpResponse.sendRedirect(lp)

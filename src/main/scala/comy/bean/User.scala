@@ -75,7 +75,6 @@ class User extends Serializable {
     val facesContext = FacesContext.getCurrentInstance
     val extContext   = facesContext.getExternalContext
     val request      = extContext.getRequest.asInstanceOf[HttpServletRequest]
-    val response     = extContext.getResponse.asInstanceOf[HttpServletResponse]
 
     // Configure the return_to URL where your application will receive
     // the authentication responses from the OpenID provider
@@ -104,7 +103,11 @@ class User extends Serializable {
       // Obtain a AuthRequest message to be sent to the OpenID provider
       val authRequest = manager.authenticate(discoveryInformation, returnToUrl)
 
-      response.sendRedirect(authRequest.getDestinationUrl(true))
+      // Using HTTP response directly in JSF to redirect will cause error:
+      //   val response = extContext.getResponse.asInstanceOf[HttpServletResponse]
+      //   response.sendRedirect(authRequest.getDestinationUrl(true))
+      extContext.redirect(authRequest.getDestinationUrl(true))
+
       0
     } catch {
       case ye: YadisException =>
