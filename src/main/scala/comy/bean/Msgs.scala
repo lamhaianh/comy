@@ -4,9 +4,13 @@ import java.text.MessageFormat
 import java.util.{Locale, ResourceBundle}
 import javax.faces.context.FacesContext
 
+import org.slf4j.LoggerFactory
+
 /** See LocaleHelper in the book JSF 2.0 Cookbook */
 object Msgs {
   private val DEFAULT_BUNDLE = "msgs"
+
+  private val logger = LoggerFactory.getLogger(getClass)
 
   def msgs(key: String, parameters: Any*): String = {
     val context = FacesContext.getCurrentInstance
@@ -21,7 +25,9 @@ object Msgs {
     val message = try {
       resourceBundle.getString(key)
     } catch {
-      case _ => ""
+      case e =>
+        logger.warn("Message not found for key: " + key, e)
+        ""
     }
 
     if (parameters.isEmpty) {
