@@ -15,7 +15,7 @@
   <listener>
     <listener-class>com.sun.faces.application.WebappLifecycleListener</listener-class>
   </listener>
-  
+
   <!-- Scalantra filters -->
 
   <filter>
@@ -88,4 +88,14 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
+
+  <error-page>
+    <error-code>404</error-code>
+    <location>/errors/404.gnt</location>
+  </error-page>
+
+  <error-page>
+    <error-code>500</error-code>
+    <location>/errors/500.gnt</location>
+  </error-page>
 </web-app>
