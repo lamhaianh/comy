@@ -24,6 +24,7 @@ class QrCode extends Controller {
   def qrcode {  // ?url=xxx
     val url = param("url")
 
+    System.setProperty("java.awt.headless", "true")  // Suppress graphical windowing mode
     val writer = new QRCodeWriter
     val mtx    = writer.encode(url, BarcodeFormat.QR_CODE, WIDTH, HEIGHT)
     invertImage(mtx)
