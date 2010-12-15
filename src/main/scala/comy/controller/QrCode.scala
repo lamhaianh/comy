@@ -8,20 +8,21 @@ import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.common.ByteMatrix
 import com.google.zxing.qrcode.QRCodeWriter
 
-import org.scalatra._
+import s3m._
 
 object QrCode {
   val WIDTH  = 150
   val HEIGHT = 150
 }
 
-/** See ScalatraServlet vs. ScalatraFilter */
-class QrCode extends ScalatraFilter {
+class QrCode extends Controller {
   import QrCode._
 
   /** See: http://www.hascode.com/2010/05/playing-around-with-qr-codes/ */
-  get("/user/qrcode") {  // ?url=xxx
-    val url = params("url")
+  @GET
+  @Path("/user/qrcode")
+  def qrcode {  // ?url=xxx
+    val url = param("url")
 
     val writer = new QRCodeWriter
     val mtx    = writer.encode(url, BarcodeFormat.QR_CODE, WIDTH, HEIGHT)
@@ -31,8 +32,8 @@ class QrCode extends ScalatraFilter {
     val baos = new ByteArrayOutputStream
     ImageIO.write(image, "png", baos)
 
-    contentType = "image/png"
-    baos.toByteArray
+    response.setContentType("image/png")
+    renderBinary(baos.toByteArray)
   }
 
   //----------------------------------------------------------------------------

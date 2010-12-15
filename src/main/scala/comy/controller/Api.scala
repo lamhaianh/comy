@@ -3,12 +3,15 @@ package comy.controller
 import comy.Config
 import comy.model.{DB, SaveUrlResult}
 
-import org.scalatra.ScalatraFilter
+import s3m._
+import s3m.exception._
 
 /** See ScalatraServlet vs. ScalatraFilter */
-class Api extends ScalatraFilter {
-  get("/:key") {
-    val key = params("key")
+class Api extends Controller {
+  @GET
+  @Path("/:key")
+  def lengthen {
+    val key = param("key")
 
     DB.getUrl(key) match {
       case Some(url) =>
@@ -16,20 +19,23 @@ class Api extends ScalatraFilter {
         // * Some KDDI AU mobiles display annoying dialog for 301
         // * Not all browsers support HTTP/1.1
         response.setStatus(302)
-        redirect(url)
+        response.sendRedirect(url)
+        complete
 
       case None =>
         // Pass to other filters/servlets instead of just
         // response.setStatus(404)
-        pass
+        throw new Pass
     }
   }
 
-  post("/api/shorten") {  // ?url=URL[&key=KEY]
+  @POST
+  @Path("/api/shorten")
+  def shorten {  // ?url=URL[&key=KEY]
     checkIpForShorten
 
-    val url  = params("url")
-    val keyo = params.get("key")
+    val url  = param("url")
+    val keyo = paramo("key")
 
     val (resultCode, resultString) = DB.saveUrl(url, keyo)
 
@@ -41,13 +47,16 @@ class Api extends ScalatraFilter {
     }
 
     response.setStatus(status)
-    if (status == 200) response.getWriter.print(resultString)
+    if (status == 200) renderText(resultString) else complete
   }
 
   //----------------------------------------------------------------------------
 
   protected def checkIpForShorten {
     val remoteIp = request.getRemoteAddr
-    if (!Config.isApiAllowed(remoteIp)) halt(403)
+    if (!Config.isApiAllowed(remoteIp)) {
+      response.sendError(403)
+      throw new Halt
+    }
   }
 }

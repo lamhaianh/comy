@@ -30,7 +30,7 @@
         <div id="csc">
           <span class="tr"></span>
 
-          <h:outputLink value="#{pageContext.request.contextPath}/user/index.gnt">
+          <h:outputLink value="#{request.contextPath}/user/index.gnt">
             <h1 id="header">#{msgs.app_name}</h1>
           </h:outputLink>
 
@@ -38,11 +38,11 @@
 
           <h:form rendered="#{loggedIn}">
             #{user.loggedInUsername} |
-            <h:outputLink value="#{pageContext.request.contextPath}/admin/stats.gnt">#{msgs.stats}</h:outputLink> |
+            <h:outputLink value="#{request.contextPath}/admin/stats.gnt">#{msgs.stats}</h:outputLink> |
             <h:commandLink action="#{user.logout}" value="#{msgs.logout}" />
           </h:form>
 
-          <h:outputLink rendered="#{not loggedIn}" value="#{pageContext.request.contextPath}/admin/login.gnt">
+          <h:outputLink rendered="#{not loggedIn}" value="#{request.contextPath}/admin/login.gnt">
             #{msgs.admin_login}
             <br />
           </h:outputLink>

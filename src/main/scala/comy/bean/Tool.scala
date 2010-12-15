@@ -41,10 +41,11 @@ class Tool {
       val extContext = facesContext.getExternalContext
       val request    = extContext.getRequest.asInstanceOf[HttpServletRequest]
       val port = request.getServerPort
+      // request.getContextPath returns "" or "/xxx"
       if (port == 80) {
-        request.getScheme + "://" + request.getServerName + "/" + request.getContextPath + resultString
+        request.getScheme + "://" + request.getServerName + request.getContextPath + "/" + resultString
       } else {
-        request.getScheme + "://" + request.getServerName + ":" + port + "/" + request.getContextPath + resultString
+        request.getScheme + "://" + request.getServerName + ":" + port + request.getContextPath + "/" + resultString
       }
     }
   }
