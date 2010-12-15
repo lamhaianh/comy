@@ -1,24 +1,13 @@
 package comy.controller
 
-import javax.servlet.{Filter, FilterChain, FilterConfig, ServletRequest, ServletResponse}
-import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
-
 import org.openid4java.message.ParameterList
+import s3m._
 
 import comy.bean.User
 
-class OpenIdReturnPoint extends Filter {
-  def init(config: FilterConfig) {}
-
-  def destroy {}
-
-  def doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
-    val httpRequest  = request.asInstanceOf[HttpServletRequest]
-    val httpResponse = response.asInstanceOf[HttpServletResponse]
-    verifyOpenIdResponse(httpRequest, httpResponse)
-  }
-
-  private def verifyOpenIdResponse(request: HttpServletRequest, response: HttpServletResponse) {
+class OpenIdReturnPoint extends Controller {
+  @Path("/open_id_return_point")
+  def returnPoint {
     val lp = PageLevelAuthenticator.loginPage(request)
 
     // Extract the parameters from the authentication response
@@ -29,6 +18,7 @@ class OpenIdReturnPoint extends Filter {
     val user = request.getSession.getAttribute("user")
     if (user == null) {
       response.sendRedirect(lp)
+      complete
       return
     }
 
@@ -51,6 +41,7 @@ class OpenIdReturnPoint extends Filter {
     val verifiedId = verification.getVerifiedId
     if (verifiedId == null) {
       response.sendRedirect(lp)
+      complete
       return
     }
 
@@ -60,5 +51,6 @@ class OpenIdReturnPoint extends Filter {
 
     val lsp = PageLevelAuthenticator.loginSuccessPage(request)
     response.sendRedirect(lsp)
+    complete
   }
 }

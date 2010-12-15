@@ -23,18 +23,10 @@
     <filter-name>PageLevelAuthenticator</filter-name>
     <filter-class>comy.controller.PageLevelAuthenticator</filter-class>
   </filter>
-  <filter>
-    <filter-name>OpenIdReturnPoint</filter-name>
-    <filter-class>comy.controller.OpenIdReturnPoint</filter-class>
-  </filter>
 
   <filter-mapping>
     <filter-name>PageLevelAuthenticator</filter-name>
     <url-pattern>/admin/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>OpenIdReturnPoint</filter-name>
-    <url-pattern>/open_id_return_point</url-pattern>
   </filter-mapping>
 
   <!-- JSF -->

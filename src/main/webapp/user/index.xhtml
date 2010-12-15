@@ -24,7 +24,7 @@
         </h:panelGrid>
 
         <h:commandButton value="#{msgs.shorten}" action="#{tool.shorten}">
-          <f:ajax execute="url key" render="@form" />
+          <f:ajax execute="url key" render="@form" />  <ui:remove><!-- Not set to only the result block, because we also want to validate the key above --></ui:remove>
         </h:commandButton>
 
         <h:panelGroup layout="block" rendered="#{not empty tool.result}">

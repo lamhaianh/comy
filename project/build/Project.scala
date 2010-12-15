@@ -13,8 +13,6 @@ class Project(info: ProjectInfo) extends DefaultWebProject(info) {
 
   // Repos ---------------------------------------------------------------------
 
-  val sonatype = "sonatype" at "https://oss.sonatype.org/content/repositories/releases"
-
   val javaNetRepo    = "java.net"   at "http://download.java.net/maven/2/"          // For both JSF and EL
   val glassfishRepo  = "Glassfish"  at "http://download.java.net/maven/glassfish/"  // For JSTL
   val primeFacesRepo = "PrimeFaces" at "http://repository.prime.com.tr"
