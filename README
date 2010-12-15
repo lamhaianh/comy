@@ -32,7 +32,3 @@ Response:
 * 302: the client will be redirected to the original URL
 * 404: invalid key or the key has been expired
 * 500: server error, for example the DB may be down
-
-= INSTALL
-
-Add -Djava.awt.headless=true to suppress annoying dialog.

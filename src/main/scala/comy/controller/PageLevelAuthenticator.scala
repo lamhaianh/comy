@@ -3,6 +3,7 @@ package comy.controller
 import javax.servlet.{Filter, FilterChain, FilterConfig, ServletRequest, ServletResponse}
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
+import comy.Config
 import comy.bean.User
 
 object PageLevelAuthenticator {
@@ -16,7 +17,13 @@ object PageLevelAuthenticator {
 class PageLevelAuthenticator extends Filter {
   import PageLevelAuthenticator._
 
-  def init(config: FilterConfig) {}
+  def init(config: FilterConfig) {
+    if (!Config.keyStore.isEmpty) {
+      System.setProperty("javax.net.ssl.keyStore",         Config.keyStore)
+      System.setProperty("javax.net.ssl.keyStorePassword", Config.keyStorePassword)
+      System.setProperty("javax.net.ssl.trustStore",       Config.keyStore)
+    }
+  }
 
   def destroy {}
 
