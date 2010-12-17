@@ -11,7 +11,6 @@
     <filter-class>s3m.controller.Dispatcher</filter-class>
     <async-supported>true</async-supported>
   </filter>
-
   <filter-mapping>
     <filter-name>S3m</filter-name>
     <url-pattern>/*</url-pattern>
@@ -23,7 +22,6 @@
     <filter-name>PageLevelAuthenticator</filter-name>
     <filter-class>comy.controller.PageLevelAuthenticator</filter-class>
   </filter>
-
   <filter-mapping>
     <filter-name>PageLevelAuthenticator</filter-name>
     <url-pattern>/admin/*</url-pattern>
@@ -56,9 +54,8 @@
     <url-pattern>*.gnt</url-pattern>
   </servlet-mapping>
 
-  <!-- http://stackoverflow.com/questions/3297634/explicit-directory-for-jsf-template-files -->
-
   <welcome-file-list>
+    <!-- http://stackoverflow.com/questions/3297634/explicit-directory-for-jsf-template-files -->
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
 
