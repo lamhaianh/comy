@@ -26,8 +26,8 @@ class Project(info: ProjectInfo) extends DefaultWebProject(info) {
     "javax.el"    % "el-api"         % "2.2" % "provided",  // Required by jsf-api
     "javax.faces" % "jsf-api"        % "2.0" % "provided",  // For compiling beans
 
-    "ch.qos.logback"  % "logback-classic"      % "0.9.26",
-    "org.mongodb"     % "mongo-java-driver"    % "2.3",
-    "org.openid4java" % "openid4java-consumer" % "0.9.5"
+    "ch.qos.logback"  % "logback-classic"   % "0.9.26",
+    "org.mongodb"     % "mongo-java-driver" % "2.3",
+    "org.expressme"   % "JOpenId"           % "1.08"
   ) ++ super.libraryDependencies
 }

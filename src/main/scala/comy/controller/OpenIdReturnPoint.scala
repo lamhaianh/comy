@@ -1,18 +1,14 @@
 package comy.controller
 
-import org.openid4java.message.ParameterList
 import s3m._
 
+import org.expressme.openid.Endpoint
 import comy.bean.User
 
 class OpenIdReturnPoint extends Controller {
   @Path("/open_id_return_point")
   def returnPoint {
     val lp = PageLevelAuthenticator.loginPage(request)
-
-    // Extract the parameters from the authentication response
-    // (which comes in as a HTTP request from the OpenID provider)
-    val openIdResponse = new ParameterList(request.getParameterMap)
 
     // Retrieve the previously stored discovery information
     val user = request.getSession.getAttribute("user")
@@ -23,30 +19,16 @@ class OpenIdReturnPoint extends Controller {
     }
 
     val userBean = user.asInstanceOf[User]
-    val discoveryInformation = userBean.discoveryInformation
+    val authentication = userBean.manager.getAuthentication(request, userBean.association.getRawMacKey, "ext1")  // ext1: Endpoint.DEFAULT_ALIAS
 
-    // Extract the receiving URL from the HTTP request
-    val receivingURL = request.getRequestURL
-
-    val queryString = request.getQueryString
-    if (queryString != null && queryString.length() > 0)
-      receivingURL.append("?").append(request.getQueryString)
-
-    // Verify the response; ConsumerManager needs to be the same
-    // (static) instance used to place the authentication request
-    val verification = userBean.manager.verify(
-      receivingURL.toString(), openIdResponse, discoveryInformation)
-
-    // Examine the verification result and extract the verified identifier
-    val verifiedId = verification.getVerifiedId
+    val verifiedId = authentication.getIdentity
     if (verifiedId == null) {
       response.sendRedirect(lp)
       complete
       return
     }
 
-    val ident = verifiedId.getIdentifier
-    val tokens = ident.split("/")
+    val tokens = verifiedId.split("/")
     userBean.loggedInUsername = tokens(tokens.length - 1)
 
     val lsp = PageLevelAuthenticator.loginSuccessPage(request)

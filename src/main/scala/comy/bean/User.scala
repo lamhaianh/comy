@@ -9,10 +9,7 @@ import javax.servlet.http.{HttpSession, HttpServletRequest, HttpServletResponse}
 
 import scala.reflect.BeanProperty
 
-import org.openid4java.consumer.ConsumerManager
-import org.openid4java.discovery.DiscoveryInformation
-import org.openid4java.discovery.yadis.YadisException
-
+import org.expressme.openid.{Association, OpenIdManager}
 import org.slf4j.LoggerFactory
 
 import comy.Config
@@ -27,8 +24,8 @@ class User extends Serializable {
   @BeanProperty var loggedInUsername: String = null
   @BeanProperty var inputUsername   : String = null
 
-  val manager = new ConsumerManager
-  var discoveryInformation: DiscoveryInformation = null
+  val manager = new OpenIdManager
+  var association: Association = _   // Each user/session has an association
 
   def logout = {
     val session = FacesContext.getCurrentInstance.getExternalContext.getSession(false).asInstanceOf[HttpSession]
@@ -90,32 +87,26 @@ class User extends Serializable {
       request.getServerPort + request.getContextPath +
       "/open_id_return_point";
     }
+    manager.setReturnTo(returnToUrl)
 
     // Perform discovery on the user-supplied identifier
     val openId = Config.openIdFormat.format(username)
     try {
-      val discoveries = manager.discover(openId)
-
-      // Attempt to associate with the OpenID provider
-      // and retrieve one service endpoint for authentication
-      discoveryInformation = manager.associate(discoveries)
-
-      // Obtain a AuthRequest message to be sent to the OpenID provider
-      val authRequest = manager.authenticate(discoveryInformation, returnToUrl)
+      val endpoint = manager.lookupEndpoint(openId)
+      val association = manager.lookupAssociation(endpoint)
+      val url = manager.getAuthenticationUrl(endpoint, association)
 
       // Using HTTP response directly in JSF to redirect will cause error:
       //   val response = extContext.getResponse.asInstanceOf[HttpServletResponse]
       //   response.sendRedirect(authRequest.getDestinationUrl(true))
-      extContext.redirect(authRequest.getDestinationUrl(true))
+      extContext.redirect(url)
 
       0
     } catch {
-      case ye: YadisException =>
-        logger.debug("YadisException", ye)
-        ye.getErrorCode
+//      case ye: YadisException =>
 
       case e =>
-        logger.debug("Not YadisException", e)
+        logger.debug("OpenID Exception", e)
         -1
     }
   }
