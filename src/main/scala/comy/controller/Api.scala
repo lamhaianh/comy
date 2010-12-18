@@ -9,7 +9,7 @@ import s3m.exception._
 /** See ScalatraServlet vs. ScalatraFilter */
 class Api extends Controller {
   @GET
-  @Path("/:key")
+  @Path(value="/:key", last=true)
   def lengthen {
     val key = param("key")
 
