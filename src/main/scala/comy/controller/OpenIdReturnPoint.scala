@@ -2,7 +2,7 @@ package comy.controller
 
 import s3m._
 
-import org.expressme.openid.Endpoint
+import org.expressme.openid.{Endpoint, OpenIdManager}
 import comy.bean.User
 
 class OpenIdReturnPoint extends Controller {
@@ -19,17 +19,11 @@ class OpenIdReturnPoint extends Controller {
     }
 
     val userBean = user.asInstanceOf[User]
-    val authentication = userBean.manager.getAuthentication(request, userBean.association.getRawMacKey, "ext1")  // ext1: Endpoint.DEFAULT_ALIAS
-
-    val verifiedId = authentication.getIdentity
-    if (verifiedId == null) {
+    if (!userBean.verifyForReturnPoint(request)) {
       response.sendRedirect(lp)
       complete
       return
     }
-
-    val tokens = verifiedId.split("/")
-    userBean.loggedInUsername = tokens(tokens.length - 1)
 
     val lsp = PageLevelAuthenticator.loginSuccessPage(request)
     response.sendRedirect(lsp)

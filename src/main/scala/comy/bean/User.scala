@@ -16,16 +16,15 @@ import comy.Config
 
 @ManagedBean
 @SessionScoped
+// @SessionScoped class should contain minimum properties so that they can be
+// serialized easily.
 class User extends Serializable {
   import Msgs._
-
-  val logger = LoggerFactory.getLogger(getClass)
 
   @BeanProperty var loggedInUsername: String = null
   @BeanProperty var inputUsername   : String = null
 
-  val manager = new OpenIdManager
-  var association: Association = _   // Each user/session has an association
+  private var association: Association = _   // Each user/session has an association
 
   def logout = {
     val session = FacesContext.getCurrentInstance.getExternalContext.getSession(false).asInstanceOf[HttpSession]
@@ -60,9 +59,29 @@ class User extends Serializable {
     }
   }
 
+  def verifyForReturnPoint(request: HttpServletRequest): Boolean = {
+    val manager = new OpenIdManager
+    val authentication = manager.getAuthentication(request, association.getRawMacKey, "ext1")  // ext1: Endpoint.DEFAULT_ALIAS
+    val openId = authentication.getIdentity
+    if (openId == null) {
+      false
+    } else {
+      loggedInUsername = usernameFromOpenId(openId)
+      true
+    }
+  }
+
   //----------------------------------------------------------------------------
 
   private def checkUsername(username: String) = true
+
+  private def usernameFromOpenId(openId: String) = {
+    val tokens = Config.openIdFormat.split("%s")  // 2 elements
+    val before = tokens(0)
+    val after  = tokens(1)
+    val beforeCut = openId.substring(before.length)
+    if (after.length == 0) beforeCut else beforeCut.substring(0, beforeCut.indexOf(after))
+  }
 
   /**
    * @return Error code from OpenID4Java, or -1 for other error, or 0 if
@@ -87,6 +106,7 @@ class User extends Serializable {
       request.getServerPort + request.getContextPath +
       "/open_id_return_point";
     }
+    val manager = new OpenIdManager
     manager.setReturnTo(returnToUrl)
 
     // Perform discovery on the user-supplied identifier
@@ -106,6 +126,7 @@ class User extends Serializable {
 //      case ye: YadisException =>
 
       case e =>
+        val logger = LoggerFactory.getLogger(getClass)
         logger.debug("OpenID Exception", e)
         -1
     }
