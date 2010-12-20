@@ -20,8 +20,11 @@ object Config {
 
   val openIdFormat = properties.getProperty("open_id_format")
 
-  val keyStore         = properties.getProperty("javax.net.ssl.keyStore")
-  val keyStorePassword = properties.getProperty("javax.net.ssl.keyStorePassword")
+  val jks                      = properties.getProperty("jks")
+  val jksPassword: Array[Char] = {
+    val string = properties.getProperty("jks_password")
+    if (string.isEmpty) null else string.toCharArray
+  }
 
   def isApiAllowed(ip: String) = apiIps.exists { ip2 =>
     (ip2 == "*") || (ip2 == ip)

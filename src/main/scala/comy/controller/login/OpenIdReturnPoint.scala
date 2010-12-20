@@ -1,9 +1,8 @@
-package comy.controller
+package comy.controller.login
 
 import s3m._
 
 import org.expressme.openid.{Endpoint, OpenIdManager}
-import comy.bean.User
 
 class OpenIdReturnPoint extends Controller {
   @Path("/open_id_return_point")

@@ -1,4 +1,4 @@
-package comy.bean
+package comy.controller
 
 import javax.faces.application.FacesMessage
 import javax.faces.bean.ManagedBean

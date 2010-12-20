@@ -20,7 +20,7 @@
 
   <filter>
     <filter-name>PageLevelAuthenticator</filter-name>
-    <filter-class>comy.controller.PageLevelAuthenticator</filter-class>
+    <filter-class>comy.controller.login.PageLevelAuthenticator</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>PageLevelAuthenticator</filter-name>

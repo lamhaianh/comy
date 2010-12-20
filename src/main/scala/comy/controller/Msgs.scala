@@ -1,4 +1,4 @@
-package comy.bean
+package comy.controller
 
 import java.text.MessageFormat
 import java.util.{Locale, ResourceBundle}
