@@ -59,7 +59,7 @@ class User extends Serializable {
   def verifyForReturnPoint(request: HttpServletRequest): Boolean = {
     try {
       val manager        = new OpenIdManager
-      manager.setReturnTo(returnToUrl(request))
+      manager.setReturnTo(PageLevelAuthenticator.returnToUrl(request))
       val authentication = manager.getAuthentication(request, macKey, alias)
       val openId         = authentication.getIdentity
       if (openId == null) {
@@ -97,7 +97,7 @@ class User extends Serializable {
     val request      = extContext.getRequest.asInstanceOf[HttpServletRequest]
 
     val manager = new OpenIdManager
-    manager.setReturnTo(returnToUrl(request))
+    manager.setReturnTo(PageLevelAuthenticator.returnToUrl(request))
 
     // Perform discovery on the user-supplied identifier
     val openId = Config.openIdFormat.format(username)
@@ -111,14 +111,19 @@ class User extends Serializable {
       // See:
       //   http://openid.net/specs/openid-authentication-2_0.html
       //   http://code.google.com/apis/accounts/docs/OpenID.html
-      val claimedUrl = url.replaceAll(URLEncoder.encode("http://specs.openid.net/auth/2.0/identifier_select", "UTF-8"), URLEncoder.encode(openId, "UTF-8"))
+      val claimedUrl = url.replaceAll(
+        URLEncoder.encode("http://specs.openid.net/auth/2.0/identifier_select", "UTF-8"),
+        URLEncoder.encode(openId, "UTF-8"))
 
       macKey = association.getRawMacKey
       alias  = endpoint.getAlias
 
-      // Using HTTP response directly in JSF to redirect will cause error:
+      // Using HTTP response directly in JSF to redirect like this:
       //   val response = extContext.getResponse.asInstanceOf[HttpServletResponse]
-      //   response.sendRedirect(authRequest.getDestinationUrl(true))
+      //   response.sendRedirect(claimedUrl)
+      // will cause error
+      //
+      // We use extContext instead
       extContext.redirect(claimedUrl)
 
       true
@@ -127,25 +132,6 @@ class User extends Serializable {
         val logger = LoggerFactory.getLogger(getClass)
         logger.error("OpenID Exception", e)
         false
-    }
-  }
-
-  /**
-   * Configure the return_to URL where your application will receive
-   * the authentication responses from the OpenID provider
-   */
-  private def returnToUrl(request: HttpServletRequest) = {
-    if ((request.getScheme == "https" && request.getServerPort == 443) ||
-        (request.getScheme == "http"  && request.getServerPort == 80)) {
-      request.getScheme + "://" +
-      request.getServerName +
-      request.getContextPath +
-      "/" + PageLevelAuthenticator.OPEN_ID_RETURN_POINT;
-    } else {
-      request.getScheme + "://" +
-      request.getServerName + ":" +
-      request.getServerPort + request.getContextPath +
-      PageLevelAuthenticator.OPEN_ID_RETURN_POINT;
     }
   }
 }

@@ -13,6 +13,31 @@ object PageLevelAuthenticator {
   val LOGIN_PAGE           = "/admin/login.gnt"
   val OPEN_ID_RETURN_POINT = "/admin/open_id"
   val LOGIN_SUCESS_PAGE    = "/admin/stats.gnt"
+
+  def isLoginRequest       (request: HttpServletRequest) = request.getServletPath == LOGIN_PAGE
+  def isOpenIdReturnRequest(request: HttpServletRequest) = request.getServletPath == OPEN_ID_RETURN_POINT
+
+  def loginPage(request: HttpServletRequest)        = request.getContextPath + LOGIN_PAGE
+  def loginSuccessPage(request: HttpServletRequest) = request.getContextPath + LOGIN_SUCESS_PAGE
+
+  /**
+   * Configure the return_to URL where your application will receive
+   * the authentication responses from the OpenID provider
+   */
+  def returnToUrl(request: HttpServletRequest) = {
+    if ((request.getScheme == "https" && request.getServerPort == 443) ||
+        (request.getScheme == "http"  && request.getServerPort == 80)) {
+      request.getScheme + "://" +
+      request.getServerName +
+      request.getContextPath +
+      "/" + OPEN_ID_RETURN_POINT;
+    } else {
+      request.getScheme + "://" +
+      request.getServerName + ":" +
+      request.getServerPort + request.getContextPath +
+      OPEN_ID_RETURN_POINT;
+    }
+  }
 }
 
 class PageLevelAuthenticator extends Filter {
@@ -29,9 +54,9 @@ class PageLevelAuthenticator extends Filter {
     val response = sresponse.asInstanceOf[HttpServletResponse]
     val lp       = loginPage(request)
 
-    if (request.getServletPath == LOGIN_PAGE) {
+    if (isLoginRequest(request)) {
       chain.doFilter(request, response)
-    } else if (request.getServletPath == OPEN_ID_RETURN_POINT) {
+    } else if (isOpenIdReturnRequest(request)) {
       openIdReturnPoint(request, response, lp)
     } else {
       checkLogin(request, response, chain, lp)
@@ -39,9 +64,6 @@ class PageLevelAuthenticator extends Filter {
   }
 
   //----------------------------------------------------------------------------
-
-  private def loginPage(request: HttpServletRequest)        = request.getContextPath + LOGIN_PAGE
-  private def loginSuccessPage(request: HttpServletRequest) = request.getContextPath + LOGIN_SUCESS_PAGE
 
   /** Sets keystore for self-signed HTTPS OpenID provider. */
   private def setJavaKeyStore {
@@ -64,14 +86,14 @@ class PageLevelAuthenticator extends Filter {
 
   private def openIdReturnPoint(request: HttpServletRequest, response: HttpServletResponse, loginPage: String) {
     // Retrieve the previously stored discovery information
-    val user = request.getSession.getAttribute("user")
-    if (user == null) {
+    val suser = request.getSession.getAttribute("user")
+    if (suser == null) {
       response.sendRedirect(loginPage)
       return
     }
 
-    val userBean = user.asInstanceOf[User]
-    if (!userBean.verifyForReturnPoint(request)) {
+    val user = suser.asInstanceOf[User]
+    if (!user.verifyForReturnPoint(request)) {
       response.sendRedirect(loginPage)
       return
     }
@@ -85,15 +107,18 @@ class PageLevelAuthenticator extends Filter {
    * loggedInUsername != null
    */
   private def checkLogin(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, loginPage: String) {
-    val user = request.getSession.getAttribute("user")
-    if (user == null)
+    val suser = request.getSession.getAttribute("user")
+    if (suser == null) {
       response.sendRedirect(loginPage)
-    else {
-      val userBean = user.asInstanceOf[User]
-      if (userBean.loggedInUsername == null)
-        response.sendRedirect(loginPage)
-      else
-        chain.doFilter(request, response)
+      return
     }
+
+    val user = suser.asInstanceOf[User]
+    if (user.loggedInUsername == null) {
+      response.sendRedirect(loginPage)
+      return
+    }
+
+    chain.doFilter(request, response)
   }
 }
