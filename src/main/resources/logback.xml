@@ -2,12 +2,12 @@
 
 <configuration scan="false" debug="false">
   <appender name="R" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <File>./log/xitrum.log</File>
+    <File>./logs/xitrum.log</File>
     <encoder>
-      <pattern>[%t] [%4p] [%d{ISO8601}] %c{1}: %m%n</pattern>
+      <pattern>[%4p] [%d{ISO8601}] %c{1}: %m%n</pattern>
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>./log/xitrum.log.%d{yyyy-MM-dd-HH}</fileNamePattern>
+      <fileNamePattern>./logs/xitrum.log.%d{yyyy-MM-dd}</fileNamePattern>
     </rollingPolicy>
   </appender>
 
