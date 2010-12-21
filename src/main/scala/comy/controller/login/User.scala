@@ -69,8 +69,7 @@ class User extends Serializable {
         true
       }
     } catch {
-      //case _ => false
-      case e => e.printStackTrace(); false
+      case _ => false
     }
   }
 
@@ -141,12 +140,12 @@ class User extends Serializable {
       request.getScheme + "://" +
       request.getServerName +
       request.getContextPath +
-      "//open_id_return_point";
+      "/" + PageLevelAuthenticator.OPEN_ID_RETURN_POINT;
     } else {
       request.getScheme + "://" +
       request.getServerName + ":" +
       request.getServerPort + request.getContextPath +
-      "/open_id_return_point";
+      PageLevelAuthenticator.OPEN_ID_RETURN_POINT;
     }
   }
 }
