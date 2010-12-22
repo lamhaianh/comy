@@ -21,10 +21,10 @@ class Project(info: ProjectInfo) extends DefaultWebProject(info) {
     // For REST API
     "tv.cntt" %% "s3m" % "1.0-SNAPSHOT",
 
-    // JSF
+    // For admin UI using JSF
     "javax"       % "javaee-web-api" % "6.0" % "provided",
-    "javax.el"    % "el-api"         % "2.2" % "provided",  // Required by jsf-api
     "javax.faces" % "jsf-api"        % "2.0" % "provided",  // For compiling beans
+    "javax.el"    % "el-api"         % "2.2" % "provided",  // Required by jsf-api
 
     "ch.qos.logback"  % "logback-classic"   % "0.9.26",
     "org.mongodb"     % "mongo-java-driver" % "2.3",
